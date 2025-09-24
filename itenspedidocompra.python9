@@ -1,0 +1,78 @@
+# item_pedido_compra.py
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
+
+def validar_quantidade(quantidade):
+    """Valida quantidade"""
+    return quantidade.isdigit() and int(quantidade) > 0
+
+def validar_preco(preco):
+    """Valida se é um preço válido"""
+    try:
+        preco_limpo = preco.replace("R$", "").replace(",", ".").strip()
+        valor = float(preco_limpo)
+        return valor > 0
+    except ValueError:
+        return False
+
+def cadastrar_item_pedido_compra():
+    print("\n" + "="*50)
+    print("CADASTRO DE ITEM DE PEDIDO DE COMPRA")
+    print("="*50)
+    
+    # Validar ID do pedido de compra
+    while True:
+        id_pedido_compra = input("ID do pedido de compra: ").strip()
+        if validar_id(id_pedido_compra):
+            break
+        else:
+            print("❌ ID do pedido de compra deve ser um número positivo.")
+    
+    # Validar ID do produto
+    while True:
+        id_produto = input("ID do produto: ").strip()
+        if validar_id(id_produto):
+            break
+        else:
+            print("❌ ID do produto deve ser um número positivo.")
+    
+    # Validar quantidade
+    while True:
+        quantidade = input("Quantidade: ").strip()
+        if validar_quantidade(quantidade):
+            break
+        else:
+            print("❌ Quantidade deve ser um número positivo.")
+    
+    # Validar preço unitário
+    while True:
+        preco_unitario = input("Preço unitário: R$ ").strip()
+        if validar_preco(preco_unitario):
+            preco_unitario_limpo = preco_unitario.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Preço unitário inválido. Use números com ponto decimal.")
+    
+    # Calcular valor total do item
+    valor_total = float(quantidade) * float(preco_unitario_limpo)
+    
+    print("\n✅ ITEM DE PEDIDO DE COMPRA CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"ID Pedido Compra: {id_pedido_compra}")
+    print(f"ID Produto: {id_produto}")
+    print(f"Quantidade: {quantidade}")
+    print(f"Preço unitário: {preco_unitario_limpo}")
+    print(f"Valor total: R$ {valor_total:.2f}")
+    
+    return {
+        'id_pedido_compra': id_pedido_compra,
+        'id_produto': id_produto,
+        'quantidade': quantidade,
+        'preco_unitario': preco_unitario_limpo,
+        'valor_total': f"{valor_total:.2f}"
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    item_pedido = cadastrar_item_pedido_compra()
