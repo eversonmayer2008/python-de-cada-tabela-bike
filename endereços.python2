@@ -1,31 +1,52 @@
-class Endereco:
-    def __init__(self, id_endereco: int, id_clientes: int, logradouro: str, 
-                 numero: str, complemento: str, bairro: str, cidade: str, 
-                 estado: str, cep: str):
-        self.id_endereco = id_endereco
-        self.id_clientes = id_clientes
-        self.logradouro = logradouro
-        self.numero = numero
-        self.complemento = complemento
-        self.bairro = bairro
-        self.cidade = cidade
-        self.estado = estado
-        self.cep = cep
+def cadastrar_endereco(id_cliente):
+    print("=== CADASTRO DE ENDEREÇO ===")
     
-    def __str__(self):
-        return f"Endereço {self.id_endereco}: {self.logradouro}, {self.numero} - {self.bairro}, {self.cidade}/{self.estado}"
+    # Coletar dados
+    logradouro = input("Logradouro: ")
+    numero = input("Número: ")
+    complemento = input("Complemento: ")
+    bairro = input("Bairro: ")
+    cidade = input("Cidade: ")
+    
+    # Validar estado (2 caracteres)
+    while True:
+        estado = input("Estado (sigla 2 letras): ").upper()
+        if len(estado) == 2 and estado.isalpha():
+            break
+        else:
+            print("❌ Estado deve ter exatamente 2 letras. Tente novamente.")
+    
+    # Validar CEP (8 dígitos)
+    while True:
+        cep = input("CEP: ")
+        cep_limpo = cep.replace("-", "").replace(".", "").replace(" ", "")
+        if len(cep_limpo) == 8 and cep_limpo.isdigit():
+            break
+        else:
+            print("❌ CEP deve conter exatamente 8 dígitos. Tente novamente.")
+    
+    # Exibir dados limpos
+    print("\n=== DADOS CADASTRADOS ===")
+    print(f"ID Cliente: {id_cliente}")
+    print(f"Logradouro: {logradouro}")
+    print(f"Número: {numero}")
+    print(f"Complemento: {complemento}")
+    print(f"Bairro: {bairro}")
+    print(f"Cidade: {cidade}")
+    print(f"Estado: {estado}")
+    print(f"CEP: {cep_limpo}")
+    
+    return {
+        'id_cliente': id_cliente,
+        'logradouro': logradouro,
+        'numero': numero,
+        'complemento': complemento,
+        'bairro': bairro,
+        'cidade': cidade,
+        'estado': estado,
+        'cep': cep_limpo
+    }
 
-# Exemplo de uso
-if __name__ == "__main__":
-    endereco = Endereco(
-        id_endereco=1,
-        id_clientes=1,
-        logradouro="Avenida Brasil",
-        numero="1500",
-        complemento="Sala 305",
-        bairro="Jardim Américas",
-        cidade="Rio de Janeiro",
-        estado="RJ",
-        cep="22000-000"
-    )
-    print(endereco)
+# Executar cadastro
+id_cliente = input("Digite o ID do cliente: ")
+endereco = cadastrar_endereco(id_cliente)
