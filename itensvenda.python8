@@ -1,0 +1,102 @@
+# item_venda.py
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
+
+def validar_quantidade(quantidade):
+    """Valida quantidade"""
+    return quantidade.isdigit() and int(quantidade) > 0
+
+def validar_preco(preco):
+    """Valida se é um preço válido"""
+    try:
+        preco_limpo = preco.replace("R$", "").replace(",", ".").strip()
+        valor = float(preco_limpo)
+        return valor > 0
+    except ValueError:
+        return False
+
+def calcular_subtotal(quantidade, preco_unitario, desconto=0):
+    """Calcula subtotal com desconto"""
+    subtotal = float(quantidade) * float(preco_unitario)
+    return subtotal - float(desconto)
+
+def cadastrar_item_venda():
+    print("\n" + "="*50)
+    print("CADASTRO DE ITEM DE VENDA")
+    print("="*50)
+    
+    # Validar ID da venda
+    while True:
+        id_venda = input("ID da venda: ").strip()
+        if validar_id(id_venda):
+            break
+        else:
+            print("❌ ID da venda deve ser um número positivo.")
+    
+    # Validar ID do produto
+    while True:
+        id_produto = input("ID do produto: ").strip()
+        if validar_id(id_produto):
+            break
+        else:
+            print("❌ ID do produto deve ser um número positivo.")
+    
+    # Validar quantidade
+    while True:
+        quantidade = input("Quantidade: ").strip()
+        if validar_quantidade(quantidade):
+            break
+        else:
+            print("❌ Quantidade deve ser um número positivo.")
+    
+    # Validar preço unitário
+    while True:
+        preco_unitario = input("Preço unitário: R$ ").strip()
+        if validar_preco(preco_unitario):
+            preco_unitario_limpo = preco_unitario.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Preço unitário inválido. Use números com ponto decimal.")
+    
+    # Validar desconto (opcional)
+    while True:
+        desconto_input = input("Desconto (R$ 0.00 se não houver): R$ ").strip()
+        if not desconto_input:
+            desconto_limpo = "0.00"
+            break
+        elif validar_preco(desconto_input):
+            desconto_limpo = desconto_input.replace("R$", "").replace(",", ".").strip()
+            # Verificar se desconto não é maior que o valor total
+            valor_total = float(quantidade) * float(preco_unitario_limpo)
+            if float(desconto_limpo) <= valor_total:
+                break
+            else:
+                print("❌ Desconto não pode ser maior que o valor total do item.")
+        else:
+            print("❌ Desconto inválido. Use números com ponto decimal.")
+    
+    # Calcular subtotal
+    subtotal = calcular_subtotal(quantidade, preco_unitario_limpo, desconto_limpo)
+    
+    print("\n✅ ITEM DE VENDA CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"ID Venda: {id_venda}")
+    print(f"ID Produto: {id_produto}")
+    print(f"Quantidade: {quantidade}")
+    print(f"Preço unitário: {preco_unitario_limpo}")
+    print(f"Desconto: {desconto_limpo}")
+    print(f"Subtotal: {subtotal:.2f}")
+    
+    return {
+        'id_venda': id_venda,
+        'id_produto': id_produto,
+        'quantidade': quantidade,
+        'preco_unitario': preco_unitario_limpo,
+        'desconto': desconto_limpo,
+        'subtotal': f"{subtotal:.2f}"
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    item_venda = cadastrar_item_venda()
