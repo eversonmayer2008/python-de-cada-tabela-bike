@@ -1,0 +1,70 @@
+# estoque.py
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
+
+def validar_quantidade(quantidade):
+    """Valida quantidade"""
+    return quantidade.isdigit() and int(quantidade) >= 0
+
+def validar_quantidade_minima(quantidade, quantidade_minima):
+    """Valida se quantidade mínima é menor ou igual à quantidade"""
+    return int(quantidade_minima) <= int(quantidade)
+
+def cadastrar_estoque():
+    print("\n" + "="*50)
+    print("CADASTRO DE ESTOQUE")
+    print("="*50)
+    
+    # Validar ID do produto
+    while True:
+        id_produto = input("ID do produto: ").strip()
+        if validar_id(id_produto):
+            break
+        else:
+            print("❌ ID do produto deve ser um número positivo.")
+    
+    # Validar quantidade
+    while True:
+        quantidade = input("Quantidade em estoque: ").strip()
+        if validar_quantidade(quantidade):
+            break
+        else:
+            print("❌ Quantidade deve ser um número positivo.")
+    
+    # Validar quantidade mínima
+    while True:
+        quantidade_minima = input("Quantidade mínima: ").strip()
+        if validar_quantidade(quantidade_minima):
+            if validar_quantidade_minima(quantidade, quantidade_minima):
+                break
+            else:
+                print("❌ Quantidade mínima não pode ser maior que a quantidade em estoque.")
+        else:
+            print("❌ Quantidade mínima deve ser um número positivo.")
+    
+    # Validar localização
+    while True:
+        localizacao = input("Localização no estoque: ").strip()
+        if localizacao:
+            break
+        else:
+            print("❌ Localização é obrigatória.")
+    
+    print("\n✅ ESTOQUE CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"ID Produto: {id_produto}")
+    print(f"Quantidade: {quantidade}")
+    print(f"Quantidade mínima: {quantidade_minima}")
+    print(f"Localização: {localizacao}")
+    
+    return {
+        'id_produto': id_produto,
+        'quantidade': quantidade,
+        'quantidade_minima': quantidade_minima,
+        'localizacao': localizacao
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    estoque = cadastrar_estoque()
