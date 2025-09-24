@@ -1,33 +1,80 @@
+# venda.py
 from datetime import datetime
-from decimal import Decimal
-from enum import Enum
 
-class FormaPagamento(Enum):
-    CARTAO_CREDITO = "cartao_credito"
-    CARTAO_DEBITO = "cartao_debito"
-    DINHEIRO = "dinheiro"
-    PIX = "pix"
-    BOLETO = "boleto"
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
 
-class Venda:
-    def __init__(self, id_vendas: int, id_clientes: int, data_venda: datetime, 
-                 valor_total: Decimal, forma_pagamento: FormaPagamento):
-        self.id_vendas = id_vendas
-        self.id_clientes = id_clientes
-        self.data_venda = data_venda
-        self.valor_total = valor_total
-        self.forma_pagamento = forma_pagamento
+def validar_datetime(data_hora):
+    """Valida formato de data e hora"""
+    try:
+        datetime.strptime(data_hora, '%Y-%m-%d %H:%M:%S')
+        return True
+    except ValueError:
+        return False
+
+def validar_valor_monetario(valor):
+    """Valida valor monetário"""
+    try:
+        valor_limpo = valor.replace("R$", "").replace(",", ".").strip()
+        float(valor_limpo)
+        return True
+    except ValueError:
+        return False
+
+def cadastrar_venda():
+    print("\n" + "="*50)
+    print("CADASTRO DE VENDA")
+    print("="*50)
     
-    def __str__(self):
-        return f"Venda {self.id_vendas}: R$ {self.valor_total} - {self.forma_pagamento.value} - Cliente {self.id_clientes}"
+    # Validar ID do cliente
+    while True:
+        id_cliente = input("ID do cliente: ").strip()
+        if validar_id(id_cliente):
+            break
+        else:
+            print("❌ ID do cliente deve ser um número positivo.")
+    
+    # Validar data da venda
+    while True:
+        data_venda = input("Data da venda (YYYY-MM-DD HH:MM:SS): ").strip()
+        if validar_datetime(data_venda):
+            break
+        else:
+            print("❌ Data/hora inválida. Use o formato YYYY-MM-DD HH:MM:SS.")
+    
+    # Validar valor total
+    while True:
+        valor_total = input("Valor total: ").strip()
+        if validar_valor_monetario(valor_total):
+            valor_limpo = valor_total.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Valor inválido. Use números com ponto decimal.")
+    
+    # Validar forma de pagamento
+    formas_validas = ['DINHEIRO', 'CARTAO', 'PIX', 'BOLETO', 'TRANSFERENCIA']
+    while True:
+        forma_pagamento = input("Forma de pagamento: ").strip().upper()
+        if forma_pagamento in formas_validas:
+            break
+        else:
+            print(f"❌ Forma de pagamento inválida. Opções: {', '.join(formas_validas)}")
+    
+    print("\n✅ VENDA CADASTRADA COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"ID Cliente: {id_cliente}")
+    print(f"Data venda: {data_venda}")
+    print(f"Valor total: {valor_limpo}")
+    print(f"Forma pagamento: {forma_pagamento}")
+    
+    return {
+        'id_cliente': id_cliente,
+        'data_venda': data_venda,
+        'valor_total': valor_limpo,
+        'forma_pagamento': forma_pagamento
+    }
 
-# Exemplo de uso
+# Executar diretamente
 if __name__ == "__main__":
-    venda = Venda(
-        id_vendas=1,
-        id_clientes=1,
-        data_venda=datetime.now(),
-        valor_total=Decimal("1500.75"),
-        forma_pagamento=FormaPagamento.PIX
-    )
-    print(venda)
+    venda = cadastrar_venda()
