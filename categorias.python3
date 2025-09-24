@@ -1,17 +1,35 @@
-class Categoria:
-    def __init__(self, id_categoria: int, nome: str, descricao: str):
-        self.id_categoria = id_categoria
-        self.nome = nome
-        self.descricao = descricao
+# categoria.py
+def cadastrar_categoria():
+    print("\n" + "="*50)
+    print("CADASTRO DE CATEGORIA")
+    print("="*50)
     
-    def __str__(self):
-        return f"Categoria {self.id_categoria}: {self.nome} - {self.descricao[:50]}..."
+    # Validar nome (obrigatório)
+    while True:
+        nome = input("Nome da categoria: ").strip()
+        if nome and len(nome) >= 2:
+            break
+        else:
+            print("❌ Nome da categoria é obrigatório e deve ter pelo menos 2 caracteres.")
+    
+    # Validar descrição (obrigatório)
+    while True:
+        descricao = input("Descrição: ").strip()
+        if descricao and len(descricao) >= 5:
+            break
+        else:
+            print("❌ Descrição é obrigatória e deve ter pelo menos 5 caracteres.")
+    
+    print("\n✅ CATEGORIA CADASTRADA COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"Nome: {nome}")
+    print(f"Descrição: {descricao}")
+    
+    return {
+        'nome': nome,
+        'descricao': descricao
+    }
 
-# Exemplo de uso
+# Executar diretamente
 if __name__ == "__main__":
-    categoria = Categoria(
-        id_categoria=1,
-        nome="Informática",
-        descricao="Produtos de informática, computadores, periféricos e acessórios"
-    )
-    print(categoria)
+    categoria = cadastrar_categoria()
