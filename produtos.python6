@@ -1,0 +1,124 @@
+# produto.py
+def validar_preco(preco):
+    """Valida se é um preço válido"""
+    try:
+        preco_limpo = preco.replace("R$", "").replace(",", ".").strip()
+        valor = float(preco_limpo)
+        return valor > 0
+    except ValueError:
+        return False
+
+def validar_ano(ano):
+    """Valida se é um ano válido"""
+    return ano.isdigit() and len(ano) == 4 and 1900 <= int(ano) <= 2100
+
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
+
+def validar_garantia(garantia):
+    """Valida meses de garantia"""
+    return garantia.isdigit() and int(garantia) >= 0
+
+def cadastrar_produto():
+    print("\n" + "="*50)
+    print("CADASTRO DE PRODUTO")
+    print("="*50)
+    
+    # Validar nome (obrigatório)
+    while True:
+        nome = input("Nome do produto: ").strip()
+        if nome and len(nome) >= 2:
+            break
+        else:
+            print("❌ Nome do produto é obrigatório e deve ter pelo menos 2 caracteres.")
+    
+    # Validar descrição (obrigatório)
+    while True:
+        descricao = input("Descrição: ").strip()
+        if descricao and len(descricao) >= 5:
+            break
+        else:
+            print("❌ Descrição é obrigatória e deve ter pelo menos 5 caracteres.")
+    
+    # Validar preço de custo
+    while True:
+        preco_custo = input("Preço de custo: R$ ").strip()
+        if validar_preco(preco_custo):
+            preco_custo_limpo = preco_custo.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Preço de custo inválido. Use números com ponto decimal.")
+    
+    # Validar preço de venda
+    while True:
+        preco_venda = input("Preço de venda: R$ ").strip()
+        if validar_preco(preco_venda):
+            preco_venda_limpo = preco_venda.replace("R$", "").replace(",", ".").strip()
+            # Verificar se preço de venda é maior que custo
+            if float(preco_venda_limpo) >= float(preco_custo_limpo):
+                break
+            else:
+                print("❌ Preço de venda deve ser maior ou igual ao preço de custo.")
+        else:
+            print("❌ Preço de venda inválido. Use números com ponto decimal.")
+    
+    # Validar ID da categoria
+    while True:
+        id_categoria = input("ID da categoria: ").strip()
+        if validar_id(id_categoria):
+            break
+        else:
+            print("❌ ID da categoria deve ser um número positivo.")
+    
+    # Validar ID da marca
+    while True:
+        id_marca = input("ID da marca: ").strip()
+        if validar_id(id_marca):
+            break
+        else:
+            print("❌ ID da marca deve ser um número positivo.")
+    
+    modelo = input("Modelo: ").strip()
+    
+    # Validar ano do modelo
+    while True:
+        ano_modelo = input("Ano do modelo (YYYY): ").strip()
+        if validar_ano(ano_modelo):
+            break
+        else:
+            print("❌ Ano do modelo inválido. Use o formato YYYY (ex: 2024).")
+    
+    # Validar garantia em meses
+    while True:
+        garantia_meses = input("Garantia (meses): ").strip()
+        if validar_garantia(garantia_meses):
+            break
+        else:
+            print("❌ Garantia deve ser um número de meses válido.")
+    
+    print("\n✅ PRODUTO CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"Nome: {nome}")
+    print(f"Preço custo: {preco_custo_limpo}")
+    print(f"Preço venda: {preco_venda_limpo}")
+    print(f"ID Categoria: {id_categoria}")
+    print(f"ID Marca: {id_marca}")
+    print(f"Ano modelo: {ano_modelo}")
+    print(f"Garantia: {garantia_meses} meses")
+    
+    return {
+        'nome': nome,
+        'descricao': descricao,
+        'preco_custo': preco_custo_limpo,
+        'preco_venda': preco_venda_limpo,
+        'id_categoria': id_categoria,
+        'id_marca': id_marca,
+        'modelo': modelo,
+        'ano_modelo': ano_modelo,
+        'garantia_meses': garantia_meses
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    produto = cadastrar_produto()
