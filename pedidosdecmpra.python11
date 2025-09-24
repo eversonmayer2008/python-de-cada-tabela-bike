@@ -1,0 +1,75 @@
+# pedido_compra.py
+from datetime import datetime
+
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
+
+def validar_datetime(data_hora):
+    """Valida formato de data e hora"""
+    try:
+        datetime.strptime(data_hora, '%Y-%m-%d %H:%M:%S')
+        return True
+    except ValueError:
+        return False
+
+def validar_valor_monetario(valor):
+    """Valida valor monetário"""
+    try:
+        valor_limpo = valor.replace("R$", "").replace(",", ".").strip()
+        valor_float = float(valor_limpo)
+        return valor_float > 0
+    except ValueError:
+        return False
+
+def cadastrar_pedido_compra():
+    print("\n" + "="*50)
+    print("CADASTRO DE PEDIDO DE COMPRA")
+    print("="*50)
+    
+    # Validar ID do fornecedor
+    while True:
+        id_fornecedor = input("ID do fornecedor: ").strip()
+        if validar_id(id_fornecedor):
+            break
+        else:
+            print("❌ ID do fornecedor deve ser um número positivo.")
+    
+    # Validar data do pedido
+    while True:
+        data_pedido_input = input("Data do pedido (YYYY-MM-DD HH:MM:SS ou Enter para data atual): ").strip()
+        
+        if not data_pedido_input:
+            # Usar data atual se não for informada
+            data_pedido = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            break
+        elif validar_datetime(data_pedido_input):
+            data_pedido = data_pedido_input
+            break
+        else:
+            print("❌ Data/hora inválida. Use o formato YYYY-MM-DD HH:MM:SS.")
+    
+    # Validar valor total
+    while True:
+        valor_total = input("Valor total do pedido: R$ ").strip()
+        if validar_valor_monetario(valor_total):
+            valor_total_limpo = valor_total.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Valor total inválido. Use números com ponto decimal.")
+    
+    print("\n✅ PEDIDO DE COMPRA CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"ID Fornecedor: {id_fornecedor}")
+    print(f"Data do pedido: {data_pedido}")
+    print(f"Valor total: {valor_total_limpo}")
+    
+    return {
+        'id_fornecedor': id_fornecedor,
+        'data_pedido': data_pedido,
+        'valor_total': valor_total_limpo
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    pedido_compra = cadastrar_pedido_compra()
