@@ -1,0 +1,82 @@
+# fornecedor.py
+import re
+
+def validar_cnpj(cnpj):
+    """Valida se o CNPJ tem 14 dígitos após limpar"""
+    cnpj_limpo = cnpj.replace(".", "").replace("-", "").replace("/", "").replace(" ", "")
+    return len(cnpj_limpo) == 14 and cnpj_limpo.isdigit()
+
+def validar_telefone(telefone):
+    """Valida se o telefone tem 10 ou 11 dígitos após limpar"""
+    telefone_limpo = telefone.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+    return len(telefone_limpo) in [10, 11] and telefone_limpo.isdigit()
+
+def validar_email(email):
+    """Valida formato básico de e-mail"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def formatar_cnpj(cnpj):
+    """Formata CNPJ para exibição (00.000.000/0000-00)"""
+    cnpj_limpo = cnpj.replace(".", "").replace("-", "").replace("/", "").replace(" ", "")
+    if len(cnpj_limpo) == 14:
+        return f"{cnpj_limpo[:2]}.{cnpj_limpo[2:5]}.{cnpj_limpo[5:8]}/{cnpj_limpo[8:12]}-{cnpj_limpo[12:]}"
+    return cnpj_limpo
+
+def cadastrar_fornecedor():
+    print("\n" + "="*50)
+    print("CADASTRO DE FORNECEDOR")
+    print("="*50)
+    
+    # Validar nome (obrigatório)
+    while True:
+        nome = input("Nome/Razão Social do fornecedor: ").strip()
+        if nome and len(nome) >= 2:
+            break
+        else:
+            print("❌ Nome do fornecedor é obrigatório e deve ter pelo menos 2 caracteres.")
+    
+    # Validar CNPJ (14 dígitos)
+    while True:
+        cnpj = input("CNPJ (14 dígitos): ").strip()
+        if validar_cnpj(cnpj):
+            cnpj_limpo = cnpj.replace(".", "").replace("-", "").replace("/", "").replace(" ", "")
+            break
+        else:
+            print("❌ CNPJ deve conter exatamente 14 dígitos numéricos.")
+    
+    # Validar telefone (10 ou 11 dígitos)
+    while True:
+        telefone = input("Telefone (com DDD): ").strip()
+        if validar_telefone(telefone):
+            telefone_limpo = telefone.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+            break
+        else:
+            print("❌ Telefone deve conter 10 ou 11 dígitos numéricos.")
+    
+    # Validar e-mail
+    while True:
+        email = input("E-mail: ").strip()
+        if validar_email(email):
+            break
+        else:
+            print("❌ E-mail inválido. Digite um e-mail válido.")
+    
+    print("\n✅ FORNECEDOR CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS (sem pontuações):")
+    print(f"Nome: {nome}")
+    print(f"CNPJ: {cnpj_limpo}")
+    print(f"Telefone: {telefone_limpo}")
+    print(f"E-mail: {email}")
+    print(f"CNPJ Formatado: {formatar_cnpj(cnpj)}")
+    
+    return {
+        'nome': nome,
+        'cnpj': cnpj_limpo,
+        'telefone': telefone_limpo,
+        'email': email
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    fornecedor = cadastrar_fornecedor()
