@@ -1,0 +1,17 @@
+class Categoria:
+    def __init__(self, id_categoria: int, nome: str, descricao: str):
+        self.id_categoria = id_categoria
+        self.nome = nome
+        self.descricao = descricao
+    
+    def __str__(self):
+        return f"Categoria {self.id_categoria}: {self.nome} - {self.descricao[:50]}..."
+
+# Exemplo de uso
+if __name__ == "__main__":
+    categoria = Categoria(
+        id_categoria=1,
+        nome="Informática",
+        descricao="Produtos de informática, computadores, periféricos e acessórios"
+    )
+    print(categoria)
