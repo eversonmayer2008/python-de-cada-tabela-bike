@@ -1,0 +1,28 @@
+from datetime import datetime, date
+
+class Cliente:
+    def __init__(self, id_clientes: int, nome: str, email: str, telefone: str, 
+                 cpf: str, data_nascimento: date, data_cadastro: datetime):
+        self.id_clientes = id_clientes
+        self.nome = nome
+        self.email = email
+        self.telefone = telefone
+        self.cpf = cpf
+        self.data_nascimento = data_nascimento
+        self.data_cadastro = data_cadastro
+    
+    def __str__(self):
+        return f"Cliente {self.id_clientes}: {self.nome} ({self.email})"
+
+# Exemplo de uso
+if __name__ == "__main__":
+    cliente = Cliente(
+        id_clientes=1,
+        nome="Maria Santos",
+        email="maria.santos@email.com",
+        telefone="(11) 98888-7777",
+        cpf="987.654.321-00",
+        data_nascimento=date(1985, 8, 20),
+        data_cadastro=datetime.now()
+    )
+    print(cliente)
