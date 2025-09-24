@@ -1,0 +1,31 @@
+class Endereco:
+    def __init__(self, id_endereco: int, id_clientes: int, logradouro: str, 
+                 numero: str, complemento: str, bairro: str, cidade: str, 
+                 estado: str, cep: str):
+        self.id_endereco = id_endereco
+        self.id_clientes = id_clientes
+        self.logradouro = logradouro
+        self.numero = numero
+        self.complemento = complemento
+        self.bairro = bairro
+        self.cidade = cidade
+        self.estado = estado
+        self.cep = cep
+    
+    def __str__(self):
+        return f"Endereço {self.id_endereco}: {self.logradouro}, {self.numero} - {self.bairro}, {self.cidade}/{self.estado}"
+
+# Exemplo de uso
+if __name__ == "__main__":
+    endereco = Endereco(
+        id_endereco=1,
+        id_clientes=1,
+        logradouro="Avenida Brasil",
+        numero="1500",
+        complemento="Sala 305",
+        bairro="Jardim Américas",
+        cidade="Rio de Janeiro",
+        estado="RJ",
+        cep="22000-000"
+    )
+    print(endereco)
