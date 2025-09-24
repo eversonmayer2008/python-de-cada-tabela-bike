@@ -1,0 +1,33 @@
+from datetime import datetime
+from decimal import Decimal
+from enum import Enum
+
+class FormaPagamento(Enum):
+    CARTAO_CREDITO = "cartao_credito"
+    CARTAO_DEBITO = "cartao_debito"
+    DINHEIRO = "dinheiro"
+    PIX = "pix"
+    BOLETO = "boleto"
+
+class Venda:
+    def __init__(self, id_vendas: int, id_clientes: int, data_venda: datetime, 
+                 valor_total: Decimal, forma_pagamento: FormaPagamento):
+        self.id_vendas = id_vendas
+        self.id_clientes = id_clientes
+        self.data_venda = data_venda
+        self.valor_total = valor_total
+        self.forma_pagamento = forma_pagamento
+    
+    def __str__(self):
+        return f"Venda {self.id_vendas}: R$ {self.valor_total} - {self.forma_pagamento.value} - Cliente {self.id_clientes}"
+
+# Exemplo de uso
+if __name__ == "__main__":
+    venda = Venda(
+        id_vendas=1,
+        id_clientes=1,
+        data_venda=datetime.now(),
+        valor_total=Decimal("1500.75"),
+        forma_pagamento=FormaPagamento.PIX
+    )
+    print(venda)
