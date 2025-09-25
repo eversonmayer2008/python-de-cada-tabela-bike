@@ -1,0 +1,78 @@
+# agendamento.py
+from datetime import datetime
+
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
+
+def validar_datetime(data_hora):
+    """Valida formato de data e hora"""
+    try:
+        datetime.strptime(data_hora, '%Y-%m-%d %H:%M:%S')
+        return True
+    except ValueError:
+        return False
+
+def cadastrar_agendamento():
+    print("\n" + "="*50)
+    print("CADASTRO DE AGENDAMENTO")
+    print("="*50)
+    
+    # Validar ID do cliente
+    while True:
+        id_cliente = input("ID do cliente: ").strip()
+        if validar_id(id_cliente):
+            break
+        else:
+            print("❌ ID do cliente deve ser um número positivo.")
+    
+    # Validar ID do serviço
+    while True:
+        id_servico = input("ID do serviço: ").strip()
+        if validar_id(id_servico):
+            break
+        else:
+            print("❌ ID do serviço deve ser um número positivo.")
+    
+    # Validar ID do funcionário
+    while True:
+        id_funcionario = input("ID do funcionário: ").strip()
+        if validar_id(id_funcionario):
+            break
+        else:
+            print("❌ ID do funcionário deve ser um número positivo.")
+    
+    # Validar data do agendamento
+    while True:
+        data_agendamento = input("Data do agendamento (YYYY-MM-DD HH:MM:SS): ").strip()
+        if validar_datetime(data_agendamento):
+            # Verificar se a data não é no passado
+            data_obj = datetime.strptime(data_agendamento, '%Y-%m-%d %H:%M:%S')
+            if data_obj >= datetime.now():
+                break
+            else:
+                print("❌ Data do agendamento não pode ser no passado.")
+        else:
+            print("❌ Data/hora inválida. Use o formato YYYY-MM-DD HH:MM:SS.")
+    
+    observacoes = input("Observações (opcional): ").strip()
+    
+    print("\n✅ AGENDAMENTO CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"ID Cliente: {id_cliente}")
+    print(f"ID Serviço: {id_servico}")
+    print(f"ID Funcionário: {id_funcionario}")
+    print(f"Data agendamento: {data_agendamento}")
+    print(f"Observações: {observacoes if observacoes else 'Nenhuma'}")
+    
+    return {
+        'id_cliente': id_cliente,
+        'id_servico': id_servico,
+        'id_funcionario': id_funcionario,
+        'data_agendamento': data_agendamento,
+        'observacoes': observacoes
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    agendamento = cadastrar_agendamento()
