@@ -1,0 +1,69 @@
+# servico.py
+def validar_preco(preco):
+    """Valida se é um preço válido"""
+    try:
+        preco_limpo = preco.replace("R$", "").replace(",", ".").strip()
+        valor = float(preco_limpo)
+        return valor > 0
+    except ValueError:
+        return False
+
+def validar_tempo_medio(tempo):
+    """Valida tempo médio em minutos"""
+    return tempo.isdigit() and int(tempo) > 0
+
+def cadastrar_servico():
+    print("\n" + "="*50)
+    print("CADASTRO DE SERVIÇO")
+    print("="*50)
+    
+    # Validar nome (obrigatório)
+    while True:
+        nome = input("Nome do serviço: ").strip()
+        if nome and len(nome) >= 2:
+            break
+        else:
+            print("❌ Nome do serviço é obrigatório e deve ter pelo menos 2 caracteres.")
+    
+    # Validar descrição (obrigatório)
+    while True:
+        descricao = input("Descrição do serviço: ").strip()
+        if descricao and len(descricao) >= 5:
+            break
+        else:
+            print("❌ Descrição é obrigatória e deve ter pelo menos 5 caracteres.")
+    
+    # Validar preço
+    while True:
+        preco = input("Preço do serviço: R$ ").strip()
+        if validar_preco(preco):
+            preco_limpo = preco.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Preço inválido. Use números com ponto decimal.")
+    
+    # Validar tempo médio
+    while True:
+        tempo_medio = input("Tempo médio em minutos: ").strip()
+        if validar_tempo_medio(tempo_medio):
+            break
+        else:
+            print("❌ Tempo médio deve ser um número positivo de minutos.")
+    
+    print("\n✅ SERVIÇO CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"Nome: {nome}")
+    print(f"Preço: {preco_limpo}")
+    print(f"Tempo médio: {tempo_medio} minutos")
+    print(f"Descrição: {descricao}")
+    
+    return {
+        'nome': nome,
+        'descricao': descricao,
+        'preco': preco_limpo,
+        'tempo_medio_minutos': tempo_medio
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    servico = cadastrar_servico()
