@@ -1,0 +1,118 @@
+# manutencao.py
+from datetime import datetime
+
+def validar_id(id_str):
+    """Valida se é um ID numérico válido"""
+    return id_str.isdigit() and int(id_str) > 0
+
+def validar_datetime(data_hora):
+    """Valida formato de data e hora"""
+    try:
+        datetime.strptime(data_hora, '%Y-%m-%d %H:%M:%S')
+        return True
+    except ValueError:
+        return False
+
+def validar_custo(custo):
+    """Valida custo"""
+    try:
+        custo_limpo = custo.replace("R$", "").replace(",", ".").strip()
+        valor = float(custo_limpo)
+        return valor >= 0
+    except ValueError:
+        return False
+
+def validar_datas(data_inicio, data_fim):
+    """Valida se data fim é depois da data início"""
+    try:
+        inicio = datetime.strptime(data_inicio, '%Y-%m-%d %H:%M:%S')
+        fim = datetime.strptime(data_fim, '%Y-%m-%d %H:%M:%S')
+        return fim > inicio
+    except ValueError:
+        return False
+
+def cadastrar_manutencao():
+    print("\n" + "="*50)
+    print("CADASTRO DE MANUTENÇÃO")
+    print("="*50)
+    
+    # Validar ID do agendamento
+    while True:
+        id_agendamento = input("ID do agendamento: ").strip()
+        if validar_id(id_agendamento):
+            break
+        else:
+            print("❌ ID do agendamento deve ser um número positivo.")
+    
+    # Validar data de início
+    while True:
+        data_inicio = input("Data de início (YYYY-MM-DD HH:MM:SS): ").strip()
+        if validar_datetime(data_inicio):
+            break
+        else:
+            print("❌ Data/hora de início inválida. Use o formato YYYY-MM-DD HH:MM:SS.")
+    
+    # Validar data de fim
+    while True:
+        data_fim = input("Data de fim (YYYY-MM-DD HH:MM:SS): ").strip()
+        if validar_datetime(data_fim):
+            if validar_datas(data_inicio, data_fim):
+                break
+            else:
+                print("❌ Data de fim deve ser depois da data de início.")
+        else:
+            print("❌ Data/hora de fim inválida. Use o formato YYYY-MM-DD HH:MM:SS.")
+    
+    diagnostico = input("Diagnóstico: ").strip()
+    pecas_utilizadas = input("Peças utilizadas: ").strip()
+    observacoes = input("Observações: ").strip()
+    
+    # Validar custo das peças
+    while True:
+        custo_pecas = input("Custo das peças (R$ 0.00 se não houver): R$ ").strip()
+        if not custo_pecas:
+            custo_pecas_limpo = "0.00"
+            break
+        elif validar_custo(custo_pecas):
+            custo_pecas_limpo = custo_pecas.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Custo das peças inválido. Use números com ponto decimal.")
+    
+    # Validar custo do serviço
+    while True:
+        custo_servico = input("Custo do serviço: R$ ").strip()
+        if validar_custo(custo_servico):
+            custo_servico_limpo = custo_servico.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Custo do serviço inválido. Use números com ponto decimal.")
+    
+    # Calcular custo total
+    custo_total = float(custo_pecas_limpo) + float(custo_servico_limpo)
+    
+    print("\n✅ MANUTENÇÃO CADASTRADA COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"ID Agendamento: {id_agendamento}")
+    print(f"Data início: {data_inicio}")
+    print(f"Data fim: {data_fim}")
+    print(f"Custo peças: {custo_pecas_limpo}")
+    print(f"Custo serviço: {custo_servico_limpo}")
+    print(f"Custo total: {custo_total:.2f}")
+    print(f"Diagnóstico: {diagnostico}")
+    
+    return {
+        'id_agendamento': id_agendamento,
+        'data_inicio': data_inicio,
+        'data_fim': data_fim,
+        'diagnostico': diagnostico,
+        'pecas_utilizadas': pecas_utilizadas,
+        'observacoes': observacoes,
+        'custo_pecas': custo_pecas_limpo,
+        'custo_servico': custo_servico_limpo,
+        'custo_total': f"{custo_total:.2f}"
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    manutencao = cadastrar_manutencao()
