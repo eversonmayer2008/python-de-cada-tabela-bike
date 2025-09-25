@@ -1,0 +1,123 @@
+# funcionario.py
+import re
+from datetime import datetime
+
+def validar_cpf(cpf):
+    """Valida se o CPF tem 11 dígitos após limpar"""
+    cpf_limpo = cpf.replace(".", "").replace("-", "")
+    return len(cpf_limpo) == 11 and cpf_limpo.isdigit()
+
+def validar_telefone(telefone):
+    """Valida se o telefone tem 11 dígitos após limpar"""
+    telefone_limpo = telefone.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+    return len(telefone_limpo) == 11 and telefone_limpo.isdigit()
+
+def validar_email(email):
+    """Valida formato básico de e-mail"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def validar_data(data):
+    """Valida formato de data"""
+    try:
+        datetime.strptime(data, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+def validar_salario(salario):
+    """Valida salário"""
+    try:
+        salario_limpo = salario.replace("R$", "").replace(",", ".").strip()
+        valor = float(salario_limpo)
+        return valor > 0
+    except ValueError:
+        return False
+
+def cadastrar_funcionario():
+    print("\n" + "="*50)
+    print("CADASTRO DE FUNCIONÁRIO")
+    print("="*50)
+    
+    # Validar nome (obrigatório)
+    while True:
+        nome = input("Nome completo: ").strip()
+        if nome and len(nome) >= 2:
+            break
+        else:
+            print("❌ Nome é obrigatório e deve ter pelo menos 2 caracteres.")
+    
+    # Validar CPF (11 dígitos)
+    while True:
+        cpf = input("CPF (11 dígitos): ").strip()
+        if validar_cpf(cpf):
+            cpf_limpo = cpf.replace(".", "").replace("-", "")
+            break
+        else:
+            print("❌ CPF deve conter exatamente 11 dígitos numéricos.")
+    
+    # Validar telefone (11 dígitos)
+    while True:
+        telefone = input("Telefone (11 dígitos com DDD): ").strip()
+        if validar_telefone(telefone):
+            telefone_limpo = telefone.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+            break
+        else:
+            print("❌ Telefone deve conter exatamente 11 dígitos numéricos.")
+    
+    # Validar e-mail
+    while True:
+        email = input("E-mail: ").strip()
+        if validar_email(email):
+            break
+        else:
+            print("❌ E-mail inválido. Digite um e-mail válido.")
+    
+    # Validar cargo (obrigatório)
+    while True:
+        cargo = input("Cargo: ").strip()
+        if cargo and len(cargo) >= 2:
+            break
+        else:
+            print("❌ Cargo é obrigatório e deve ter pelo menos 2 caracteres.")
+    
+    # Validar data de admissão
+    while True:
+        data_admissao = input("Data de admissão (YYYY-MM-DD): ").strip()
+        if validar_data(data_admissao):
+            break
+        else:
+            print("❌ Data de admissão inválida. Use o formato YYYY-MM-DD.")
+    
+    # Validar salário
+    while True:
+        salario = input("Salário: R$ ").strip()
+        if validar_salario(salario):
+            salario_limpo = salario.replace("R$", "").replace(",", ".").strip()
+            break
+        else:
+            print("❌ Salário inválido. Use números com ponto decimal.")
+    
+    print("\n✅ FUNCIONÁRIO CADASTRADO COM SUCESSO!")
+    print("DADOS LIMPOS:")
+    print(f"Nome: {nome}")
+    print(f"CPF: {cpf_limpo}")
+    print(f"Telefone: {telefone_limpo}")
+    print(f"E-mail: {email}")
+    print(f"Cargo: {cargo}")
+    print(f"Data admissão: {data_admissao}")
+    print(f"Salário: {salario_limpo}")
+    
+    return {
+        'nome': nome,
+        'email': email,
+        'telefone': telefone_limpo,
+        'cpf': cpf_limpo,
+        'cargo': cargo,
+        'data_admissao': data_admissao,
+        'salario': salario_limpo
+    }
+
+# Executar diretamente
+if __name__ == "__main__":
+    funcionario = cadastrar_funcionario()
